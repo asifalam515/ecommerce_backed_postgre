@@ -82,4 +82,27 @@ sellerRoute.put("/:id", async (req: Request, res: Response) => {
     });
   }
 });
+// delete seller data
+sellerRoute.delete("/:id", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    const deletedUser = await pool.query(
+      `DELETE FROM sellers WHERE id=$1 RETURNING *`,
+      [id]
+    );
+    if (deletedUser.rowCount === 0) {
+      res.send("delete was not successful");
+    }
+    res.status(200).json({
+      success: true,
+      data: deletedUser.rows[0],
+      message: "Deleted seller Data",
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
 // sellerRoute.get("");

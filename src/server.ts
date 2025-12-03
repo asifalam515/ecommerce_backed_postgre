@@ -3,12 +3,14 @@ import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import path from "path";
 import { Pool } from "pg";
+import { SellerRoute } from "./modules/seller/seller.route";
 const app = express();
 const port = 5000;
 dotenv.config({ path: path.join(process.cwd(), ".env") });
 app.use(express.json());
 app.use(cors());
-const pool = new Pool({
+app.use("/", SellerRoute);
+export const pool = new Pool({
   connectionString: `${process.env.DATABASE_URL}`,
 });
 
